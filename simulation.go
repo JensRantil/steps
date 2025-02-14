@@ -67,3 +67,10 @@ func (s *Simulation) RunUntil(until time.Time) {
 		}
 	}
 }
+
+// RunUntilDone runs the simulation until there are no more events to process.
+func (s *Simulation) RunUntilDone() {
+	for s.Step() {
+		// Deliberately left empty.
+	}
+}
