@@ -1,7 +1,7 @@
 # steps
 [![GoDoc](https://godoc.org/github.com/JensRantil/steps?status.svg)](https://pkg.go.dev/github.com/JensRantil/steps)
 
-"Steps" simple discrete event simulator in Go. Useful for simulations of systems that are driven by events, such as queues, workflows, etc.
+"Steps" is a simple discrete event simulator in Go. It's useful for simulations of systems that are driven by events, such as queues, workflows, etc.
 
 See [the documentation](https://pkg.go.dev/github.com/JensRantil/steps) for API and examples.
 
