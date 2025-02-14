@@ -11,9 +11,9 @@ func TestBasicSimulation(t *testing.T) {
 	sim := &Simulation{}
 
 	whenToRun := sim.Now.Add(1 * time.Second)
-	sim.Schedule(whenToRun, func(s *Simulation) {
+	sim.Schedule(ScheduledEvent{When: whenToRun, Action: func(s *Simulation) {
 		timesCalled = append(timesCalled, s.Now)
-	})
+	}})
 
 	whenToStop := sim.Now.Add(20 * time.Second)
 	sim.RunUntil(whenToStop)

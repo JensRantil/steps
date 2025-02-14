@@ -2,13 +2,15 @@ package events
 
 import "time"
 
+type ScheduledEventID int
+
 // Simulation runs a discrete event simulation.
 type Simulation struct {
 	// Now represents the current point in time in the simulation. It is not recommended to modify this value during a simulation.
 	Now time.Time
 
 	// nextID is incremented for each event scheduled to the simulation. It is used to sort events with the same time.
-	nextID int
+	nextID ScheduledEventID
 
 	// queue is the queue of future events to be processed.
 	queue eventQueue
@@ -20,19 +22,20 @@ func (s *Simulation) Step() bool {
 		return false
 	}
 	e := s.queue.Pop()
-	if e.When.After(s.Now) {
+	if e.Event.When.After(s.Now) {
 		// Never allow s.Now to go backwards in time.
-		s.Now = e.When
+		s.Now = e.Event.When
 	}
-	e.Action(s)
+	e.Event.Action(s)
 	return true
 }
 
 type Action func(*Simulation)
 
 // Schedule adds an event to the simulation.
-func (s *Simulation) Schedule(w time.Time, a Action) {
-	s.queue.Push(scheduledEvent{Order: s.nextID, When: w, Action: a})
+func (s *Simulation) Schedule(e ScheduledEvent) {
+	id := s.nextID
+	s.queue.Push(scheduledEvent{Order: id, Event: e})
 	s.nextID++
 }
 
@@ -42,7 +45,7 @@ func (s *Simulation) RunUntil(until time.Time) {
 		if s.queue.Len() == 0 {
 			break
 		}
-		if s.queue.Peek().When.After(until) {
+		if s.queue.Peek().Event.When.After(until) {
 			// Don't process events after the given time.
 			break
 		}
@@ -60,9 +63,9 @@ func Ticker(sim *Simulation, start time.Time, duration time.Duration, f func(s *
 	var nextRun func(s *Simulation)
 	nextRun = func(s *Simulation) {
 		f(s)
-		s.Schedule(s.Now.Add(duration), nextRun)
+		s.Schedule(ScheduledEvent{When: s.Now.Add(duration), Action: nextRun})
 	}
 
 	// Schedule the first run.
-	sim.Schedule(start, nextRun)
+	sim.Schedule(ScheduledEvent{When: start, Action: nextRun})
 }

@@ -12,9 +12,9 @@ func TestQueueTimeBasedOrdering(t *testing.T) {
 
 	// These events are in order of schedule priority.
 	events := []scheduledEvent{
-		{Order: 1, When: now.Add(time.Second), Action: nil},
-		{Order: 2, When: now.Add(time.Second * 2), Action: nil},
-		{Order: 3, When: now.Add(time.Second * 2), Action: nil},
+		{Order: 1, Event: ScheduledEvent{When: now.Add(time.Second), Action: nil}},
+		{Order: 2, Event: ScheduledEvent{When: now.Add(time.Second * 2), Action: nil}},
+		{Order: 3, Event: ScheduledEvent{When: now.Add(time.Second * 2), Action: nil}},
 	}
 
 	// Subtest that adds the events to the queue and then pops them in order.
@@ -70,5 +70,5 @@ func TestQueueTimeBasedOrdering(t *testing.T) {
 }
 
 func eventsAreEqual(a, b scheduledEvent) bool {
-	return a.Order == b.Order && a.When == b.When
+	return a.Order == b.Order && a.Event.When == b.Event.When
 }

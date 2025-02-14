@@ -6,20 +6,23 @@ import (
 	"time"
 )
 
-// scheduledEvent represents a future scheduledEvent in the simulation.
-type scheduledEvent struct {
-	Order int
-
+type ScheduledEvent struct {
 	// When is the time at which the event should be processed as measured from the start of the simulation.
 	When time.Time
 
 	// Action is the function to call when the event is to be processed.
-	Action func(*Simulation)
+	Action Action
+}
+
+// scheduledEvent represents a future scheduledEvent in the simulation.
+type scheduledEvent struct {
+	Order ScheduledEventID
+	Event ScheduledEvent
 }
 
 // String returns a string representation of the event.
 func (e scheduledEvent) String() string {
-	return fmt.Sprintf("Event{Order: %d, When: %s}", e.Order, e.When)
+	return fmt.Sprintf("Event{Order: %d, When: %s}", e.Order, e.Event.When)
 }
 
 // eventQueue is a type-safe heap of events. Events with the same time are sorted by order. Otherwise, they are sorted by time, smallest first.
@@ -57,10 +60,10 @@ type eventsHeap []scheduledEvent
 
 func (h eventsHeap) Len() int { return len(h) }
 func (h eventsHeap) Less(i, j int) bool {
-	if h[i].When == h[j].When {
+	if h[i].Event.When == h[j].Event.When {
 		return h[i].Order < h[j].Order
 	}
-	return h[i].When.Before(h[j].When)
+	return h[i].Event.When.Before(h[j].Event.When)
 }
 func (h eventsHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
 
