@@ -39,10 +39,11 @@ func (s *Simulation) Step() bool {
 type Action func(*Simulation)
 
 // Schedule adds an event to the simulation.
-func (s *Simulation) Schedule(e ScheduledEvent) {
+func (s *Simulation) Schedule(e ScheduledEvent) ScheduledEventID {
 	id := s.nextID
 	s.queue.Push(scheduledEvent{Order: id, Event: e})
 	s.nextID++
+	return id
 }
 
 // RunUntil runs the simulation until the given time or there are no more events to process.
