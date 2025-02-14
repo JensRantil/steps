@@ -1,3 +1,3 @@
-module github.com/JensRantil/discrete-events
+module github.com/JensRantil/steps
 
 go 1.23.1

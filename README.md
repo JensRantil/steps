@@ -1,9 +1,9 @@
-# discrete-events
-[![GoDoc](https://godoc.org/github.com/JensRantil/discrete-events?status.svg)](https://pkg.go.dev/github.com/JensRantil/discrete-events)
+# steps
+[![GoDoc](https://godoc.org/github.com/JensRantil/steps?status.svg)](https://pkg.go.dev/github.com/JensRantil/steps)
 
-A simple discrete event simulator in Go.
+"Steps" simple discrete event simulator in Go. Useful for simulations of systems that are driven by events, such as queues, workflows, etc.
 
-See [the documentation](https://pkg.go.dev/github.com/JensRantil/discrete-events) for API and examples.
+See [the documentation](https://pkg.go.dev/github.com/JensRantil/steps) for API and examples.
 
 ## Why write yet another discrete event simulator?
 
