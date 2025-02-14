@@ -116,3 +116,81 @@ func (h *conditionHeap) Pop() any {
 	delete(h.IndexByID, x.ID)
 	return x
 }
+
+// CountingSemaphore is a semaphore that can be used to synchronize actions and limit the number of concurrent actions (in the simulation sense). It is a counting semaphore with a maximum of count.
+type CountingSemaphore struct {
+	sim *Simulation
+
+	max       int
+	executing int
+
+	readyToExecute *Condition
+}
+
+// NewCountingSemaphore creates a new counting semaphore.
+func NewCountingSemaphore(sim *Simulation, count int) *CountingSemaphore {
+	if count < 1 {
+		panic("count must be at least 1")
+	}
+	return &CountingSemaphore{
+		sim:            sim,
+		max:            count,
+		executing:      0,
+		readyToExecute: NewCondition(sim),
+	}
+}
+
+// Acquire acquires the semaphore. If the semaphore is already acquired, the action will be scheduled to run when the semaphore is released. Do not forget to call Release() when the action is done (unless you want to hold the semaphore for longer).
+func (s *CountingSemaphore) Acquire(a Action) {
+	f := func(sim *Simulation) {
+		if s.executing >= s.max {
+			// Too many actions are being executed. Wait for the semaphore to be released.
+
+			s.readyToExecute.Wait(a)
+			return
+		}
+		s.executing++
+		a(sim)
+	}
+
+	// Schedule this instead of executing immediately to make sure code is only running within the simulation loop.
+	s.sim.Schedule(ScheduledEvent{
+		When:   time.Time{}, // As soon as possible.
+		Action: f,
+	})
+}
+
+// Release releases the semaphore.
+func (s *CountingSemaphore) Release() {
+	s.executing--
+	if s.executing < s.max {
+		// There is now space for one more action to acquire the semaphore. Signaling.
+		s.readyToExecute.Signal()
+	}
+}
+
+// BinarySemaphore is a semaphore that can be used to synchronize actions. It is a counting semaphore with a maximum of 1. Since a simulation can only run one action at a time, this library does not implement any mutex[1]
+//
+// [1] https://en.wikipedia.org/wiki/Lock_(computer_science)#Mutexes_vs._semaphores
+type BinarySemaphore struct {
+	sim       *Simulation
+	semaphore *CountingSemaphore
+}
+
+// NewBinarySemaphore creates a new binary semaphore.
+func NewBinarySemaphore(sim *Simulation) *BinarySemaphore {
+	return &BinarySemaphore{
+		sim:       sim,
+		semaphore: NewCountingSemaphore(sim, 1),
+	}
+}
+
+// Acquire acquires the semaphore. If the semaphore is already acquired, the action will be scheduled to run when the semaphore is released. Do not forget to call Release() when the action is done (unless you want to hold the semaphore for longer).
+func (s *BinarySemaphore) Acquire(a Action) {
+	s.semaphore.Acquire(a)
+}
+
+// Release releases the semaphore.
+func (s *BinarySemaphore) Release() {
+	s.semaphore.Release()
+}
