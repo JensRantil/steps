@@ -13,13 +13,13 @@ type Simulation struct {
 	nextID ScheduledEventID
 
 	// queue is the queue of future events to be processed.
-	queue eventQueue
+	queue *eventQueue
 }
 
 // NewSimulation creates a new simulation.
 func NewSimulation() *Simulation {
 	// Currently, the zero value of Simulation is a valid simulation. However, this function exists to this library a bit more forward compatible in case zero values are no longer valid.
-	return &Simulation{}
+	return &Simulation{queue: newEventQueue()}
 }
 
 // Step advances the simulation by one time unit. It returns true if the simulation advanced, false if there were no events to process.
