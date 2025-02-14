@@ -115,7 +115,7 @@ func testCountingSemaphore(t *testing.T, max int) {
 	}
 }
 
-// ExampleCondition demonstrates how to use the Condition to synchronize actions. It simulates processing 100 items, rate-limited to one item per second.
+// ExampleCondition demonstrates how to use the Condition to synchronize actions. It simulates processing ten (10) items, rate-limited to one item per second.
 func ExampleCondition() {
 	sim := NewSimulation()
 	c := NewCondition(sim)
