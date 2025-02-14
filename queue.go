@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// ScheduledEvent represents an event that will be processed as soon as possible after a specific time.
 type ScheduledEvent struct {
 	// When is the time at which the event should be processed as measured from the start of the simulation.
 	When time.Time
