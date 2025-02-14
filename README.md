@@ -1,7 +1,7 @@
 # discrete-events
 [![GoDoc](https://godoc.org/github.com/JensRantil/discrete-events?status.svg)](https://pkg.go.dev/github.com/JensRantil/discrete-events)
 
-A simple discrete event simulator/scheduler in Go.
+A simple discrete event simulator in Go.
 
 See [the documentation](https://pkg.go.dev/github.com/JensRantil/discrete-events) for API and examples.
 
