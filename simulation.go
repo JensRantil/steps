@@ -39,7 +39,7 @@ func (s *Simulation) Step() bool {
 
 type Action func(*Simulation)
 
-// Schedule adds an event to the simulation.
+// Schedule schedules an event to be executed at the given time by the simulator. It returns the ID of the event, which can be used to cancel the event before it is executed.
 func (s *Simulation) Schedule(e Event) EventID {
 	id := s.nextID
 	s.queue.Push(scheduledEvent{ID: id, Event: e})
