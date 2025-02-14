@@ -41,7 +41,7 @@ type Action func(*Simulation)
 // Schedule adds an event to the simulation.
 func (s *Simulation) Schedule(e ScheduledEvent) ScheduledEventID {
 	id := s.nextID
-	s.queue.Push(scheduledEvent{Order: id, Event: e})
+	s.queue.Push(scheduledEvent{ID: id, Event: e})
 	s.nextID++
 	return id
 }
