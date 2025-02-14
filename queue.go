@@ -33,7 +33,11 @@ type eventQueue struct {
 
 // newEventQueue creates a new event queue.
 func newEventQueue() *eventQueue {
-	return &eventQueue{}
+	return &eventQueue{
+		heap: eventsHeap{
+			IndexByID: make(map[ScheduledEventID]int),
+		},
+	}
 }
 
 // Push adds an event to the queue.
@@ -58,25 +62,43 @@ func (q *eventQueue) Len() int {
 
 // A heap of events. Events with the same time are sorted by order. Otherwise, they are sorted by time, smallest first.
 type eventsHeap struct {
-	Events []scheduledEvent
+	Events    []scheduledEvent
+	IndexByID map[ScheduledEventID]int
 }
 
-func (h eventsHeap) Len() int { return len(h.Events) }
+func (h eventsHeap) Len() int {
+	sliceLen := len(h.Events)
+	if sliceLen != len(h.IndexByID) {
+		panic(fmt.Sprintf("len(h.Events) != len(h.IndexByID): %d != %d", sliceLen, len(h.IndexByID)))
+	}
+	return sliceLen
+}
 func (h eventsHeap) Less(i, j int) bool {
 	if h.Events[i].Event.When == h.Events[j].Event.When {
 		return h.Events[i].ID < h.Events[j].ID
 	}
 	return h.Events[i].Event.When.Before(h.Events[j].Event.When)
 }
-func (h eventsHeap) Swap(i, j int) { h.Events[i], h.Events[j] = h.Events[j], h.Events[i] }
+func (h eventsHeap) Swap(i, j int) {
+	h.Events[i], h.Events[j] = h.Events[j], h.Events[i]
 
-func (h *eventsHeap) Push(x any) {
-	h.Events = append(h.Events, x.(scheduledEvent))
+	h.IndexByID[h.Events[i].ID] = i
+	h.IndexByID[h.Events[j].ID] = j
+}
+
+func (h *eventsHeap) Push(xUntyped any) {
+	x := xUntyped.(scheduledEvent)
+	if _, found := h.IndexByID[x.ID]; found {
+		panic(fmt.Sprintf("event with ID %d already exists", x.ID))
+	}
+	h.Events = append(h.Events, x)
+	h.IndexByID[x.ID] = len(h.Events) - 1
 }
 
 func (h *eventsHeap) Pop() any {
 	n := len(h.Events)
 	x := h.Events[n-1]
 	h.Events = h.Events[0 : n-1]
+	delete(h.IndexByID, x.ID)
 	return x
 }
