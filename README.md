@@ -3,7 +3,7 @@
 
 A simple discrete event simulator/scheduler in Go.
 
-See [simulation_test.go](simulation_test.go) for examples. You can find the documentation [here](https://pkg.go.dev/github.com/JensRantil/discrete-events).
+See [the documentation](https://pkg.go.dev/github.com/JensRantil/discrete-events) for API and examples.
 
 ## Why write yet another discrete event simulator?
 
