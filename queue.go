@@ -48,7 +48,7 @@ func (q *eventQueue) Pop() scheduledEvent {
 
 // Peek returns the next event in the queue without removing it.
 func (q *eventQueue) Peek() scheduledEvent {
-	return q.heap[0]
+	return q.heap.Events[0]
 }
 
 // Len returns the number of events in the queue.
@@ -57,25 +57,26 @@ func (q *eventQueue) Len() int {
 }
 
 // A heap of events. Events with the same time are sorted by order. Otherwise, they are sorted by time, smallest first.
-type eventsHeap []scheduledEvent
-
-func (h eventsHeap) Len() int { return len(h) }
-func (h eventsHeap) Less(i, j int) bool {
-	if h[i].Event.When == h[j].Event.When {
-		return h[i].ID < h[j].ID
-	}
-	return h[i].Event.When.Before(h[j].Event.When)
+type eventsHeap struct {
+	Events []scheduledEvent
 }
-func (h eventsHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+
+func (h eventsHeap) Len() int { return len(h.Events) }
+func (h eventsHeap) Less(i, j int) bool {
+	if h.Events[i].Event.When == h.Events[j].Event.When {
+		return h.Events[i].ID < h.Events[j].ID
+	}
+	return h.Events[i].Event.When.Before(h.Events[j].Event.When)
+}
+func (h eventsHeap) Swap(i, j int) { h.Events[i], h.Events[j] = h.Events[j], h.Events[i] }
 
 func (h *eventsHeap) Push(x any) {
-	*h = append(*h, x.(scheduledEvent))
+	h.Events = append(h.Events, x.(scheduledEvent))
 }
 
 func (h *eventsHeap) Pop() any {
-	old := *h
-	n := len(old)
-	x := old[n-1]
-	*h = old[0 : n-1]
+	n := len(h.Events)
+	x := h.Events[n-1]
+	h.Events = h.Events[0 : n-1]
 	return x
 }
