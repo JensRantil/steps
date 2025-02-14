@@ -189,7 +189,7 @@ func ExampleBinarySemaphore() {
 	// 0001-01-01 00:01:40 +0000 UTC Done processing item 9
 }
 
-// ExampleCountingSemaphore demonstrates how to use the CountingSemaphore to synchronize actions.
+// ExampleCountingSemaphore demonstrates how to use the CountingSemaphore to synchronize actions. It simulates processing ten (10) items, three (3) at a time.
 func ExampleCountingSemaphore() {
 	sim := NewSimulation()
 	sem := NewCountingSemaphore(sim, 3)
