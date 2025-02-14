@@ -196,7 +196,8 @@ func ExampleCountingSemaphore() {
 
 	// Simulate processing 10 items, 3 at a time.
 	timeToProcess := 10 * time.Second
-	for i := range 10 {
+	itemsToProcess := 10
+	for i := range itemsToProcess {
 		sem.Acquire(func(sim *Simulation) {
 			// We have now acquired the semaphore and can start processing.
 			fmt.Println(sim.Now, "Processing item", i)
