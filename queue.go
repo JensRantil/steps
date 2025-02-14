@@ -55,6 +55,16 @@ func (q *eventQueue) Peek() scheduledEvent {
 	return q.heap.Events[0]
 }
 
+// Remove removes an event from the queue. Returns true if the event was found and removed, false otherwise.
+func (q *eventQueue) Remove(id ScheduledEventID) bool {
+	index, found := q.heap.IndexByID[id]
+	if !found {
+		return false
+	}
+	heap.Remove(&q.heap, index)
+	return true
+}
+
 // Len returns the number of events in the queue.
 func (q *eventQueue) Len() int {
 	return q.heap.Len()

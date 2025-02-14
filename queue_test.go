@@ -83,3 +83,34 @@ func TestQueueLen(t *testing.T) {
 		t.Errorf("expected queue length 3, got %d", queue.Len())
 	}
 }
+
+func TestQueueRemoveOfExistingEvent(t *testing.T) {
+	queue := newEventQueue()
+
+	event := scheduledEvent{ID: 42, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}}
+	queue.Push(event)
+
+	if removed := queue.Remove(event.ID); !removed {
+		t.Errorf("expected event to be removed")
+	}
+
+	if queue.Len() != 0 {
+		t.Errorf("expected queue length 2, got %d", queue.Len())
+	}
+}
+
+func TestQueueRemoveOfMissingEvent(t *testing.T) {
+	queue := newEventQueue()
+
+	event := scheduledEvent{ID: 42, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}}
+	queue.Push(event)
+
+	missingID := event.ID - 1
+	if removed := queue.Remove(missingID); removed {
+		t.Errorf("expected event to not be removed")
+	}
+
+	if queue.Len() != 1 {
+		t.Errorf("expected queue length 2, got %d", queue.Len())
+	}
+}
