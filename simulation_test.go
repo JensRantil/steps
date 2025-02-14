@@ -10,7 +10,7 @@ import (
 func ExampleSimulation() {
 	sim := NewSimulation()
 
-	sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+	sim.Schedule(Event{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	}})
 	sim.RunUntil(sim.Now.Add(time.Second * 2))
@@ -25,7 +25,7 @@ func TestBasicSimulation(t *testing.T) {
 	sim := NewSimulation()
 
 	whenToRun := sim.Now.Add(1 * time.Second)
-	sim.Schedule(ScheduledEvent{When: whenToRun, Action: func(s *Simulation) {
+	sim.Schedule(Event{When: whenToRun, Action: func(s *Simulation) {
 		timesCalled = append(timesCalled, s.Now)
 	}})
 
@@ -71,7 +71,7 @@ func TestSimulationUntil(t *testing.T) {
 func TestCancellingExistingEvent(t *testing.T) {
 	sim := NewSimulation()
 
-	id := sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+	id := sim.Schedule(Event{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	}})
 
@@ -83,7 +83,7 @@ func TestCancellingExistingEvent(t *testing.T) {
 func TestCancellingNonExistingEvent(t *testing.T) {
 	sim := NewSimulation()
 
-	id := sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+	id := sim.Schedule(Event{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	}})
 

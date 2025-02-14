@@ -98,7 +98,7 @@ func testCountingSemaphore(t *testing.T, max int) {
 
 			executions++
 
-			sim.Schedule(ScheduledEvent{When: sim.Now.Add(10 * time.Second), Action: func(sim *Simulation) {
+			sim.Schedule(Event{When: sim.Now.Add(10 * time.Second), Action: func(sim *Simulation) {
 				sem.Release()
 				running--
 			}})
@@ -158,7 +158,7 @@ func ExampleBinarySemaphore() {
 			// We have now acquired the semaphore and can start processing.
 			fmt.Println(sim.Now, "Processing item", i)
 
-			sim.Schedule(ScheduledEvent{When: sim.Now.Add(timeToProcess), Action: func(sim *Simulation) {
+			sim.Schedule(Event{When: sim.Now.Add(timeToProcess), Action: func(sim *Simulation) {
 				fmt.Println(sim.Now, "Done processing item", i)
 				sem.Release()
 			}})
@@ -201,7 +201,7 @@ func ExampleCountingSemaphore() {
 			// We have now acquired the semaphore and can start processing.
 			fmt.Println(sim.Now, "Processing item", i)
 
-			sim.Schedule(ScheduledEvent{When: sim.Now.Add(timeToProcess), Action: func(sim *Simulation) {
+			sim.Schedule(Event{When: sim.Now.Add(timeToProcess), Action: func(sim *Simulation) {
 				fmt.Println(sim.Now, "Done processing item", i)
 				sem.Release()
 			}})

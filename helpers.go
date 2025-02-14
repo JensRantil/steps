@@ -9,9 +9,9 @@ func Ticker(sim *Simulation, start time.Time, duration time.Duration, f Action) 
 	var nextRun func(s *Simulation)
 	nextRun = func(s *Simulation) {
 		f(s)
-		s.Schedule(ScheduledEvent{When: s.Now.Add(duration), Action: nextRun})
+		s.Schedule(Event{When: s.Now.Add(duration), Action: nextRun})
 	}
 
 	// Schedule the first run.
-	sim.Schedule(ScheduledEvent{When: start, Action: nextRun})
+	sim.Schedule(Event{When: start, Action: nextRun})
 }

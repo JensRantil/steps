@@ -47,7 +47,7 @@ func (c *Condition) Signal() {
 	}
 
 	item := heap.Pop(c.heap).(conditionActionItem)
-	c.sim.Schedule(ScheduledEvent{
+	c.sim.Schedule(Event{
 		When:   time.Time{}, // As soon as possible.
 		Action: item.Action,
 	})
@@ -58,7 +58,7 @@ func (c *Condition) Broadcast() {
 	for c.heap.Len() > 0 {
 		// It's important that we iterate over the heap in order to schedule in a FIFO manner.
 		item := heap.Pop(c.heap).(conditionActionItem)
-		c.sim.Schedule(ScheduledEvent{
+		c.sim.Schedule(Event{
 			When:   time.Time{}, // As soon as possible.
 			Action: item.Action,
 		})
@@ -154,7 +154,7 @@ func (s *CountingSemaphore) Acquire(a Action) {
 	}
 
 	// Schedule this instead of executing immediately to make sure code is only running within the simulation loop.
-	s.sim.Schedule(ScheduledEvent{
+	s.sim.Schedule(Event{
 		When:   time.Time{}, // As soon as possible.
 		Action: f,
 	})

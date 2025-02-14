@@ -2,7 +2,7 @@ package events
 
 import "time"
 
-type ScheduledEventID int
+type EventID int
 
 // Simulation runs a discrete event simulation.
 type Simulation struct {
@@ -10,7 +10,7 @@ type Simulation struct {
 	Now time.Time
 
 	// nextID is incremented for each event scheduled to the simulation. It is used to sort events with the same time.
-	nextID ScheduledEventID
+	nextID EventID
 
 	// queue is the queue of future events to be processed.
 	queue *eventQueue
@@ -39,7 +39,7 @@ func (s *Simulation) Step() bool {
 type Action func(*Simulation)
 
 // Schedule adds an event to the simulation.
-func (s *Simulation) Schedule(e ScheduledEvent) ScheduledEventID {
+func (s *Simulation) Schedule(e Event) EventID {
 	id := s.nextID
 	s.queue.Push(scheduledEvent{ID: id, Event: e})
 	s.nextID++
@@ -47,7 +47,7 @@ func (s *Simulation) Schedule(e ScheduledEvent) ScheduledEventID {
 }
 
 // Cancel cancels an event scheduled to the simulation. Returns true if the event was found and cancelled, false if the event was not found (never scheduled, or it was already executed).
-func (s *Simulation) Cancel(id ScheduledEventID) bool {
+func (s *Simulation) Cancel(id EventID) bool {
 	return s.queue.Remove(id)
 }
 

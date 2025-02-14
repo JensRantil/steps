@@ -12,9 +12,9 @@ func TestQueueTimeBasedOrdering(t *testing.T) {
 
 	// These events are in order of schedule priority.
 	events := []scheduledEvent{
-		{ID: 1, Event: ScheduledEvent{When: now.Add(time.Second), Action: nil}},
-		{ID: 2, Event: ScheduledEvent{When: now.Add(time.Second * 2), Action: nil}},
-		{ID: 3, Event: ScheduledEvent{When: now.Add(time.Second * 2), Action: nil}},
+		{ID: 1, Event: Event{When: now.Add(time.Second), Action: nil}},
+		{ID: 2, Event: Event{When: now.Add(time.Second * 2), Action: nil}},
+		{ID: 3, Event: Event{When: now.Add(time.Second * 2), Action: nil}},
 	}
 
 	// Subtest that adds the events to the queue and then pops them in order.
@@ -75,9 +75,9 @@ func eventsAreEqual(a, b scheduledEvent) bool {
 
 func TestQueueLen(t *testing.T) {
 	queue := newEventQueue()
-	queue.Push(scheduledEvent{ID: 1, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}})
-	queue.Push(scheduledEvent{ID: 2, Event: ScheduledEvent{When: time.Now().Add(time.Second * 2), Action: nil}})
-	queue.Push(scheduledEvent{ID: 3, Event: ScheduledEvent{When: time.Now().Add(time.Second * 2), Action: nil}})
+	queue.Push(scheduledEvent{ID: 1, Event: Event{When: time.Now().Add(time.Second), Action: nil}})
+	queue.Push(scheduledEvent{ID: 2, Event: Event{When: time.Now().Add(time.Second * 2), Action: nil}})
+	queue.Push(scheduledEvent{ID: 3, Event: Event{When: time.Now().Add(time.Second * 2), Action: nil}})
 
 	if queue.Len() != 3 {
 		t.Errorf("expected queue length 3, got %d", queue.Len())
@@ -87,7 +87,7 @@ func TestQueueLen(t *testing.T) {
 func TestQueueRemoveOfExistingEvent(t *testing.T) {
 	queue := newEventQueue()
 
-	event := scheduledEvent{ID: 42, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}}
+	event := scheduledEvent{ID: 42, Event: Event{When: time.Now().Add(time.Second), Action: nil}}
 	queue.Push(event)
 
 	if removed := queue.Remove(event.ID); !removed {
@@ -102,7 +102,7 @@ func TestQueueRemoveOfExistingEvent(t *testing.T) {
 func TestQueueRemoveOfMissingEvent(t *testing.T) {
 	queue := newEventQueue()
 
-	event := scheduledEvent{ID: 42, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}}
+	event := scheduledEvent{ID: 42, Event: Event{When: time.Now().Add(time.Second), Action: nil}}
 	queue.Push(event)
 
 	missingID := event.ID - 1

@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-// ScheduledEvent represents an event that will be processed as soon as possible after a specific time.
-type ScheduledEvent struct {
+// Event represents an event that will be processed as soon as possible after a specific time.
+type Event struct {
 	// When is the time at which the event should be processed as measured from the start of the simulation.
 	When time.Time
 
@@ -17,8 +17,8 @@ type ScheduledEvent struct {
 
 // scheduledEvent represents a future scheduledEvent in the simulation.
 type scheduledEvent struct {
-	ID    ScheduledEventID
-	Event ScheduledEvent
+	ID    EventID
+	Event Event
 }
 
 // String returns a string representation of the event.
@@ -35,7 +35,7 @@ type eventQueue struct {
 func newEventQueue() *eventQueue {
 	return &eventQueue{
 		heap: eventsHeap{
-			IndexByID: make(map[ScheduledEventID]int),
+			IndexByID: make(map[EventID]int),
 		},
 	}
 }
@@ -56,7 +56,7 @@ func (q *eventQueue) Peek() scheduledEvent {
 }
 
 // Remove removes an event from the queue. Returns true if the event was found and removed, false otherwise.
-func (q *eventQueue) Remove(id ScheduledEventID) bool {
+func (q *eventQueue) Remove(id EventID) bool {
 	index, found := q.heap.IndexByID[id]
 	if !found {
 		return false
@@ -73,7 +73,7 @@ func (q *eventQueue) Len() int {
 // A heap of events. Events with the same time are sorted by order. Otherwise, they are sorted by time, smallest first.
 type eventsHeap struct {
 	Events    []scheduledEvent
-	IndexByID map[ScheduledEventID]int
+	IndexByID map[EventID]int
 }
 
 func (h eventsHeap) Len() int {
