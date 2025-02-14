@@ -1,7 +1,9 @@
 package events
 
 import (
+	"fmt"
 	"testing"
+	"time"
 )
 
 func TestConditionSignal(t *testing.T) {
@@ -70,7 +72,33 @@ func (a *testAction) Execute(*Simulation) {
 	a.executed = true
 }
 
-// ExampleCondition demonstrates how to use the Condition to synchronize actions.
+// ExampleCondition demonstrates how to use the Condition to synchronize actions. It simulates processing 100 items, rate-limited to one item per second.
 func ExampleCondition() {
-	// TODO: Implement this.
+	sim := NewSimulation()
+	c := NewCondition(sim)
+
+	itemsToProcess := 10
+	for range itemsToProcess {
+		c.Wait(func(sim *Simulation) {
+			fmt.Println(sim.Now, "Processing...")
+		})
+	}
+	Ticker(sim, sim.Now, time.Second, func(sim *Simulation) {
+		c.Signal()
+	})
+
+	// Deliberately not using sim.RunUntilDone() here since the Ticker will run indefinitely.
+	sim.RunUntil(sim.Now.Add(time.Duration(2*itemsToProcess) * time.Second))
+
+	// Output:
+	// 0001-01-01 00:00:00 +0000 UTC Processing...
+	// 0001-01-01 00:00:01 +0000 UTC Processing...
+	// 0001-01-01 00:00:02 +0000 UTC Processing...
+	// 0001-01-01 00:00:03 +0000 UTC Processing...
+	// 0001-01-01 00:00:04 +0000 UTC Processing...
+	// 0001-01-01 00:00:05 +0000 UTC Processing...
+	// 0001-01-01 00:00:06 +0000 UTC Processing...
+	// 0001-01-01 00:00:07 +0000 UTC Processing...
+	// 0001-01-01 00:00:08 +0000 UTC Processing...
+	// 0001-01-01 00:00:09 +0000 UTC Processing...
 }
