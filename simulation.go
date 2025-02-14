@@ -2,6 +2,7 @@ package steps
 
 import "time"
 
+// EventID is the ID of a scheduled event. It is mostly used if you need to cancel a scheduled event before it is executed.
 type EventID int
 
 // Simulation runs a discrete event simulation.
