@@ -9,9 +9,6 @@ import (
 func ExampleTicker() {
 	sim := NewSimulation()
 
-	sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
-		fmt.Println("Actor 1:", sim.Now)
-	}})
 	Ticker(sim, sim.Now, 1*time.Second, func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	})
@@ -29,7 +26,6 @@ func ExampleTicker() {
 	// Actor 1: 0001-01-01 00:00:00 +0000 UTC
 	// Actor 2: 0001-01-01 00:00:00 +0000 UTC
 	// Actor 3: 0001-01-01 00:00:00 +0000 UTC
-	// Actor 1: 0001-01-01 00:00:01 +0000 UTC
 	// Actor 1: 0001-01-01 00:00:01 +0000 UTC
 	// Actor 1: 0001-01-01 00:00:02 +0000 UTC
 	// Actor 2: 0001-01-01 00:00:03 +0000 UTC
