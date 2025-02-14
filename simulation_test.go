@@ -67,3 +67,28 @@ func TestSimulationUntil(t *testing.T) {
 		t.Errorf("last time called %s is after %s", lastTime, whenToStop)
 	}
 }
+
+func TestCancellingExistingEvent(t *testing.T) {
+	sim := NewSimulation()
+
+	id := sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+		fmt.Println("Actor 1:", sim.Now)
+	}})
+
+	if !sim.Cancel(id) {
+		t.Errorf("expected event to be cancelled")
+	}
+}
+
+func TestCancellingNonExistingEvent(t *testing.T) {
+	sim := NewSimulation()
+
+	id := sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+		fmt.Println("Actor 1:", sim.Now)
+	}})
+
+	nonExistingID := id + 1
+	if sim.Cancel(nonExistingID) {
+		t.Errorf("expected event to be cancelled")
+	}
+}

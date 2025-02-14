@@ -46,6 +46,11 @@ func (s *Simulation) Schedule(e ScheduledEvent) ScheduledEventID {
 	return id
 }
 
+// Cancel cancels an event scheduled to the simulation. Returns true if the event was found and cancelled, false if the event was not found (never scheduled, or it was already executed).
+func (s *Simulation) Cancel(id ScheduledEventID) bool {
+	return s.queue.Remove(id)
+}
+
 // RunUntil runs the simulation until the given time or there are no more events to process.
 func (s *Simulation) RunUntil(until time.Time) {
 	for {
