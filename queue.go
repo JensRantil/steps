@@ -23,7 +23,7 @@ type scheduledEvent struct {
 
 // String returns a string representation of the event.
 func (e scheduledEvent) String() string {
-	return fmt.Sprintf("Event{Order: %d, When: %s}", e.ID, e.Event.When)
+	return fmt.Sprintf("scheduledEvent{ID: %d, When: %s}", e.ID, e.Event.When)
 }
 
 // eventQueue is a type-safe heap of events. Events with the same time are sorted by order. Otherwise, they are sorted by time, smallest first.
