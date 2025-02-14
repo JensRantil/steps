@@ -22,7 +22,7 @@ func NewSimulation() *Simulation {
 	return &Simulation{queue: newEventQueue()}
 }
 
-// Step advances the simulation by one time unit. It returns true if the simulation advanced, false if there were no events to process.
+// Step advances the simulation by one event. It returns true if the simulation advanced, false if there were no events to process.
 func (s *Simulation) Step() bool {
 	if s.queue.Len() == 0 {
 		return false
