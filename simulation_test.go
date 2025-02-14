@@ -1,9 +1,22 @@
 package events
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
+
+// ExampleSimulation shows how to use the Simulation type to schedule a single event and run a simulation until a given time.
+func ExampleSimulation() {
+	sim := &Simulation{}
+	sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+		fmt.Println("Actor 1:", sim.Now)
+	}})
+	sim.RunUntil(sim.Now.Add(time.Second * 2))
+
+	// Output:
+	// Actor 1: 0001-01-01 00:00:01 +0000 UTC
+}
 
 func TestBasicSimulation(t *testing.T) {
 	var timesCalled []time.Time
