@@ -7,7 +7,7 @@ import (
 
 // ExampleOfTickers shows how to use the Ticker helper to schedule events at regular intervals.
 func ExampleOfTickers() {
-	sim := &Simulation{}
+	sim := NewSimulation()
 
 	sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)

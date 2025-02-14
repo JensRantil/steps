@@ -8,7 +8,8 @@ import (
 
 // ExampleSimulation shows how to use the Simulation type to schedule a single event and run a simulation until a given time.
 func ExampleSimulation() {
-	sim := &Simulation{}
+	sim := NewSimulation()
+
 	sim.Schedule(ScheduledEvent{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	}})
@@ -21,7 +22,7 @@ func ExampleSimulation() {
 func TestBasicSimulation(t *testing.T) {
 	var timesCalled []time.Time
 
-	sim := &Simulation{}
+	sim := NewSimulation()
 
 	whenToRun := sim.Now.Add(1 * time.Second)
 	sim.Schedule(ScheduledEvent{When: whenToRun, Action: func(s *Simulation) {
@@ -43,7 +44,7 @@ func TestBasicSimulation(t *testing.T) {
 func TestSimulationUntil(t *testing.T) {
 	var timesCalled []time.Time
 
-	sim := &Simulation{}
+	sim := NewSimulation()
 
 	Ticker(sim, sim.Now, 1*time.Second, func(s *Simulation) {
 		timesCalled = append(timesCalled, s.Now)
