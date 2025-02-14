@@ -7,5 +7,5 @@ See [simulation_test.go](simulation_test.go) for examples. You can find the docu
 
 ## Why write yet another discrete event simulator?
 
- * https://github.com/fschuetz04/simgo was too slow for my needs. I needed to run simulations in an inner loop.
- * https://github.com/agoussia/godes was too heavyweight and complex for my needs. I just needed a simple performant scheduler (without any goroutines).
+ * [simgo](https://github.com/fschuetz04/simgo) was too slow for my needs. I needed to run simulations in an inner loop.
+ * [godes](https://github.com/agoussia/godes) was too heavyweight and complex for my needs. I just needed a simple performant scheduler (without any goroutines).
