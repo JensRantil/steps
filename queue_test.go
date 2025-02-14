@@ -72,3 +72,14 @@ func TestQueueTimeBasedOrdering(t *testing.T) {
 func eventsAreEqual(a, b scheduledEvent) bool {
 	return a.ID == b.ID && a.Event.When == b.Event.When
 }
+
+func TestQueueLen(t *testing.T) {
+	queue := newEventQueue()
+	queue.Push(scheduledEvent{ID: 1, Event: ScheduledEvent{When: time.Now().Add(time.Second), Action: nil}})
+	queue.Push(scheduledEvent{ID: 2, Event: ScheduledEvent{When: time.Now().Add(time.Second * 2), Action: nil}})
+	queue.Push(scheduledEvent{ID: 3, Event: ScheduledEvent{When: time.Now().Add(time.Second * 2), Action: nil}})
+
+	if queue.Len() != 3 {
+		t.Errorf("expected queue length 3, got %d", queue.Len())
+	}
+}
