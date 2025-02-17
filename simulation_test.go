@@ -10,13 +10,18 @@ import (
 func ExampleSimulation() {
 	sim := NewSimulation()
 
-	sim.Schedule(Event{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+	sim.Schedule(Event{When: sim.Now.Add(10 * time.Second), Action: func(s *Simulation) {
 		fmt.Println("Actor 1:", sim.Now)
 	}})
+	sim.Schedule(Event{When: sim.Now.Add(time.Second), Action: func(s *Simulation) {
+		fmt.Println("Actor 2:", sim.Now)
+	}})
+
 	sim.RunUntilDone()
 
 	// Output:
-	// Actor 1: 0001-01-01 00:00:01 +0000 UTC
+	// Actor 2: 0001-01-01 00:00:01 +0000 UTC
+	// Actor 1: 0001-01-01 00:00:10 +0000 UTC
 }
 
 func TestBasicSimulation(t *testing.T) {
